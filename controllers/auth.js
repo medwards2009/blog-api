@@ -69,25 +69,25 @@ exports.login = async (req, res, next) => {
       statusCode: 400,
     });
   }
-  console.log("hit?");
+
   try {
     // Check for the user
     const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
-      next({ message: "Invalid credentials", statusCode: 401 });
+      return next({ message: "Invalid credentials", statusCode: 401 });
     }
 
     // Check if password matches
     const isMatch = await user.matchPassword(password);
 
     if (!isMatch) {
-      next({ message: "Invalid credentials", statusCode: 401 });
+      return next({ message: "Invalid credentials", statusCode: 401 });
     }
 
     // Check for user verification
     if (!user.verified) {
-      next({
+      return next({
         message: "Please follow the link in your email to verify your account",
         statusCode: 401,
       });
