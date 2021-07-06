@@ -1,5 +1,6 @@
-const User = require("../models/User");
+const jwt = require("jsonwebtoken");
 const slugify = require("slugify");
+const User = require("../models/User");
 
 const sendEmail = require("../utils/sendVerificationEmail");
 
@@ -53,7 +54,18 @@ exports.register = async (req, res, next) => {
 // @access Public
 exports.verify = async (req, res, next) => {
   const { token } = req.params;
-  res.status(200).json({ token });
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+  try {
+    const user = await User.findByIdAndUpdate(
+      decoded.id,
+      { verified: true },
+      { new: true }
+    );
+    res.status(200).json({ success: true });
+  } catch (err) {
+    next(err);
+  }
 };
 
 // @desc LogIn User
