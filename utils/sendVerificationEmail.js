@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 
-const sendEmail = async (user, token) => {
+const sendEmail = async (user, token, next) => {
   const verifyUrl = `http://localhost:3000/verify/${token}`;
 
   const transporter = nodemailer.createTransport({
