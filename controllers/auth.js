@@ -37,7 +37,7 @@ exports.register = async (req, res, next) => {
 
     const token = user.getSignedJwtToken();
 
-    await sendEmail(user, token);
+    await sendEmail(user, token, next);
 
     res.status(200).json({
       success: true,
