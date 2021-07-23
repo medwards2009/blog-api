@@ -105,16 +105,16 @@ exports.login = async (req, res, next) => {
       });
     }
 
-    // in stead of the last bit in this controller, the devcamper api uses this
-    // in devcamper, this method is defined at the bottom of the auth.js file
-    // seems like something that could be defined in its own file in a util.. food for thought
-    // sendTokenResponse(user, 200, res);
-
-    // create token
-    // this user dot notation here gives you access to mongoose methods defined in the model/schema
     const token = user.getSignedJwtToken();
 
-    res.status(200).json({
+    const options = {
+      expires: new Date(
+        Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
+      ),
+      httpOnly: true,
+    };
+
+    res.status(200).cookie("token", token, options).json({
       success: true,
       token,
     });
