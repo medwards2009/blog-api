@@ -57,11 +57,7 @@ exports.verify = async (req, res, next) => {
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
   try {
-    const user = await User.findByIdAndUpdate(
-      decoded.id,
-      { verified: true },
-      { new: true }
-    );
+    await User.findByIdAndUpdate(decoded.id, { verified: true }, { new: true });
     res.status(200).json({ success: true });
   } catch (err) {
     next(err);
