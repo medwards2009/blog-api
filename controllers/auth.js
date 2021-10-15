@@ -8,7 +8,7 @@ const sendEmail = require("../utils/sendVerificationEmail");
 // @route POST /api/v1/auth/register
 // @access Public
 exports.register = async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body;
 
   if (!name || !email || !password) {
     return next({
@@ -32,6 +32,7 @@ exports.register = async (req, res, next) => {
       name,
       email,
       password,
+      role,
       slug,
     });
 
@@ -64,6 +65,10 @@ exports.verify = async (req, res, next) => {
   }
 
   try {
+    // The third option in the function below "new" tells it to return
+    // the value after the update not before. in this case, since we are
+    // not assigning the the return value, it is useless, but i will leave
+    // it here for future reference
     await User.findByIdAndUpdate(decoded.id, { verified: true }, { new: true });
     res.status(200).json({ success: true });
   } catch (err) {

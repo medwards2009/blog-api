@@ -11,6 +11,7 @@ dotenv.config({ path: "./.env" });
 
 // route files
 const auth = require("./routes/auth");
+const config = require("./routes/config");
 
 //Connect to db
 connectDb();
@@ -28,6 +29,7 @@ app.use(cors());
 
 // Mount routers
 app.use("/api/v1/auth", auth);
+app.use("/api/v1/config", config);
 
 app.use(errorHandler);
 
